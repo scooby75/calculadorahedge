@@ -4,13 +4,17 @@ import streamlit as st
 def calc_back_profit(stake_back, odd_back):
     return stake_back * (odd_back - 1)
 
-# Função para calcular o valor e odd do Lay para cobrir a aposta Back
+# Função para calcular a odd Lay e a stake Lay que cobrirão a aposta Back e ainda gerem lucro
 def calc_lay_to_cover(stake_back, odd_back, desired_profit):
     back_profit = calc_back_profit(stake_back, odd_back)
-    # Responsabilidade do Lay precisa cobrir o lucro do Back + lucro desejado
-    total_to_cover = back_profit + desired_profit
-    # Assumimos que odd_lay é ligeiramente menor que odd_back para garantir lucro
-    odd_lay = odd_back - 2  # Ajustável, menor que a odd_back
+    
+    # Total que queremos cobrir
+    total_to_cover = stake_back + desired_profit
+
+    # Definindo uma odd Lay, que pode ser um pouco menor que a odd Back
+    odd_lay = odd_back - 1  # Ajustável conforme estratégia
+
+    # Calculando a stake Lay necessária
     stake_lay = total_to_cover / (odd_lay - 1)
     return odd_lay, stake_lay
 
@@ -21,13 +25,13 @@ def calc_total_profit(lay_stake, odd_lay, back_profit):
     return back_profit - lucro_lay
 
 # Interface do Streamlit
-st.title("Calculadora de Cobertura Back e Lay com Lucro")
+st.title("Calculadora de Aposta Back e Lay")
 
 st.sidebar.header("Insira os valores da aposta Back")
 
 # Inputs da aposta Back
 stake_back = st.sidebar.number_input("Valor Apostado no Back (R$):", min_value=0.0, step=0.01, value=0.04)
-odd_back = st.sidebar.number_input("Odd Back:", min_value=1.0, step=0.01, value=25.0)
+odd_back = st.sidebar.number_input("Odd Back:", min_value=1.0, step=0.01, value=26.0)
 desired_profit = st.sidebar.number_input("Lucro desejado (R$):", min_value=0.0, step=0.01, value=0.01)
 
 # Botão para calcular
